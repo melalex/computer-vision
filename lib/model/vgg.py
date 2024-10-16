@@ -32,7 +32,9 @@ def create_vgg_16(num_classes, input_shape=(224, 224, 3)):
             ### Output block 1 ##
             layers.Flatten(),
             layers.Dense(4096, activation="relu"),
+            layers.Dropout(0.5),
             layers.Dense(4096, activation="relu"),
-            layers.Dense(num_classes, activation="softmax"),
+            layers.Dropout(0.5),
+            layers.Dense(num_classes),
         ]
     )
