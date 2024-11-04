@@ -10,3 +10,4 @@ tensorflow==2.14.0
 tensorflow-metal==1.1.0
 keras==2.14.0
 ipykernel==6.29.5
+tfds-nightly==4.9.7.dev202411030045

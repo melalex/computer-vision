@@ -1,4 +1,3 @@
-import numpy as np
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 
@@ -7,22 +6,25 @@ from keras import datasets, utils
 from src.data.util.numpy_data_generator import NumpyDataGenerator
 from src.visualization.image import sample_image_dataset
 
+import tensorflow_datasets as tfds
 
-def create_mnist_data_generator(
-    batch_size: int, validation_split: float, size: tuple[int, int] = None
+
+def create_image_net_data_generator(
+    batch_size: int, test_split: float, validation_split: float, size: tuple[int, int] = None
 ) -> tuple[NumpyDataGenerator, NumpyDataGenerator, NumpyDataGenerator, int, int]:
-    (all_x, all_y), (test_x, test_y) = datasets.mnist.load_data()
+    all_x, all_y = tfds.load("imagenet2012", shuffle_files=True)
 
-    all_x = all_x / 255
-    test_x = test_x / 255
-
-    train_x, valid_x, train_y, valid_y = train_test_split(
-        all_x, all_y, test_size=validation_split
+    all_train_x, all_train_y, test_x, test_y = train_test_split(
+        all_x, all_y, test_size=test_split
     )
 
-    train_x = tf.expand_dims(train_x, -1)
-    valid_x = tf.expand_dims(valid_x, -1)
-    test_x = tf.expand_dims(test_x, -1)
+    train_x, valid_x, train_y, valid_y = train_test_split(
+        all_train_x, all_train_y, test_size=validation_split
+    )
+
+    train_x = train_x / 255
+    valid_x = valid_x / 255
+    test_x = test_x / 255
 
     if size is not None:
         train_x = tf.image.resize(train_x, size=size).numpy()
