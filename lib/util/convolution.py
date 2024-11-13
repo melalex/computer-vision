@@ -1,6 +1,5 @@
 import numpy as np
 import tensorflow as tf
-from lib.util.types import ArrayLike
 
 
 SOBEL_X = tf.convert_to_tensor([[1, 0, -1], [2, 0, -1], [1, 0, -1]], dtype=tf.float32)
@@ -8,8 +7,8 @@ SOBEL_Y = tf.convert_to_tensor([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], dtype=tf.fl
 
 
 def conv(
-    target: ArrayLike,
-    kernel: ArrayLike,
+    target: np.array,
+    kernel: np.array,
     striding: tuple[int, int] = (1, 1),
     padding: list[tuple[int, int]] = [(0, 0), (0, 0)],
 ):
