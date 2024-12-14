@@ -1,4 +1,7 @@
 from typing import Optional
+import keras_cv
+from keras_cv import bounding_box
+from keras_cv import visualization
 from matplotlib import pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -57,3 +60,41 @@ def sample_image_and_mask(
             plt.imshow(mask_hat, interpolation="nearest")
 
     plt.show()
+
+
+def sample_obj_detection_dataset(
+    inputs, value_range, rows, cols, bounding_box_format, class_mapping
+):
+    inputs = next(iter(inputs.take(1)))
+    images, bounding_boxes = inputs["images"], inputs["bounding_boxes"]
+
+    keras_cv.visualization.plot_bounding_box_gallery(
+        images,
+        value_range=value_range,
+        rows=rows,
+        cols=cols,
+        y_true=bounding_boxes,
+        scale=5,
+        font_scale=0.7,
+        bounding_box_format=bounding_box_format,
+        class_mapping=class_mapping,
+    )
+
+
+def visualize_detections(model, dataset, bounding_box_format, class_mapping):
+    images, y_true = next(iter(dataset.take(1)))
+    y_pred = model.predict(images)
+    y_pred = bounding_box.to_ragged(y_pred)
+    visualization.plot_bounding_box_gallery(
+        images,
+        value_range=(0, 255),
+        bounding_box_format=bounding_box_format,
+        y_true=y_true,
+        y_pred=y_pred,
+        scale=4,
+        rows=2,
+        cols=2,
+        show=True,
+        font_scale=0.7,
+        class_mapping=class_mapping,
+    )

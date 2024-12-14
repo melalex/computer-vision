@@ -3,10 +3,12 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 
 
-def plot_loss_and_val_loss(train_feedback, size=(12, 6)):
+def plot_loss_and_val_loss(
+    train_feedback, size=(12, 6), loss_name="loss", val_loss_name="val_loss"
+):
     plt.figure(figsize=size)
-    plt.plot(train_feedback.history["loss"], label="Training Loss")
-    plt.plot(train_feedback.history["val_loss"], label="Validation Loss")
+    plt.plot(train_feedback.history[loss_name], label="Training Loss")
+    plt.plot(train_feedback.history[val_loss_name], label="Validation Loss")
     plt.title("Training and Validation Loss")
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
